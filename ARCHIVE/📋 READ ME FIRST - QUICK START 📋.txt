@@ -1,0 +1,40 @@
+📁 iPSC TRACKER - QUICK ACCESS GUIDE 📁
+
+🎯 MAIN LAUNCHER (Double-click to start):
+   🧬 START iPSC TRACKER 🧬.bat
+
+🔗 CREATE YOUR OWN SHORTCUT:
+   📱 CREATE DESKTOP SHORTCUT 📱.bat
+
+📊 ACCESS URLS (when running):
+   • Local:   http://localhost:8501
+   • Network: http://[COMPUTER-NAME]:8501
+
+👥 TEAM INSTRUCTIONS:
+   1. Everyone can create their own desktop shortcut
+   2. Or access via network when someone is running it
+   3. All data is shared - everyone sees the same entries
+   4. Use "My name" field for personal filtering
+
+🔧 TECHNICAL FILES:
+   • app.py (main application)
+   • db.py (database functions)
+   • requirements.txt (dependencies)
+   • Various guides and documentation
+
+📂 DATA FOLDERS:
+   • images/ (uploaded culture photos)
+   • daily_exports/ (automated Excel backups)
+   • exports/ (manual exports)
+
+💡 TIPS:
+   • The 🧬 START file is your main launcher
+   • The 📱 CREATE file makes desktop shortcuts
+   • Both have emojis to make them easy to spot!
+   • Share the network URL with team members
+
+🆘 HELP:
+   Check the .md files for detailed guides:
+   • SERVER_INSTALLATION_GUIDE.md
+   • HOW_TO_RUN_GUIDE.md
+   • LAB_BOOK_COPY_PASTE_GUIDE.md

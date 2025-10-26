@@ -1,0 +1,68 @@
+# Database files (contain sensitive lab data)# Database files (contain sensitive lab data)
+
+*.db*.db
+
+*.db-shm*.db-shm
+
+*.db-wal*.db-wal
+
+
+
+# Data exports# Data exports
+
+daily_exports/daily_exports/
+
+exports/exports/
+
+*.xlsx*.xlsx
+
+*.csv*.csv
+
+
+
+# Personal lab images# Personal lab images
+
+images/images/
+
+
+
+# Python cache# Python cache
+
+__pycache__/__pycache__/
+
+*.pyc*.pyc
+
+*.pyo*.pyo
+
+
+
+# Environment files# Environment files
+
+.env.env
+
+*.log*.log
+
+
+
+# OS generated files# OS generated files
+
+.DS_Store.DS_Store
+
+Thumbs.dbThumbs.db
+
+
+
+# Temporary files# Temporary files
+
+*.tmp*.tmp
+
+*.temp*.temp
+
+
+
+# Archive folder (contains development history)# Archive folder (optional - contains development history)
+
+ARCHIVE/ARCHIVE/
+
+# Local configuration
+config.local.*

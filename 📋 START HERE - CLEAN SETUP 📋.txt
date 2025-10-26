@@ -1,0 +1,78 @@
+# 🧬 iPSC Tracker - Clean Installation
+
+## 🚀 HOW TO START THE APPLICATION
+
+### ⭐ SIMPLE - FOR EVERYONE:
+**Double-click: 🌐 TEAM ACCESS MANAGER 🌐.bat**
+
+That's it! This one file does everything:
+- ✅ Checks if someone else is already running the server
+- ✅ Connects you to existing server OR starts new one safely  
+- ✅ Prevents conflicts and multiple instances
+- ✅ Works for both first person and team members
+
+### Alternative Launchers:
+- **🚀 SMART LAUNCHER 🚀.bat** - Advanced with port detection
+- **🧬 START iPSC TRACKER 🧬.bat** - Simple starter
+- **🛠️ SETUP ASSISTANT 🛠️.bat** - First-time setup and troubleshooting
+
+---
+
+## 📁 FOLDER CONTENTS
+
+### Essential Files (Keep These):
+- **app.py** - Main application
+- **db.py** - Database functions
+- **requirements.txt** - Python packages needed
+- **ipsc_tracker.db** - Your data (DO NOT DELETE!)
+
+### Launcher Files:
+- **🌐 TEAM ACCESS MANAGER 🌐.bat** - ⭐ **USE THIS ONE** ⭐
+- **🚀 SMART LAUNCHER 🚀.bat** - Alternative launcher
+- **🧬 START iPSC TRACKER 🧬.bat** - Simple launcher
+- **🛠️ SETUP ASSISTANT 🛠️.bat** - Setup help
+- **🔄 VERSION UPGRADE HELPER 🔄.bat** - Python upgrade help
+- **🔧 DIAGNOSTIC LAUNCHER 🔧.bat** - Troubleshooting
+
+### Data Folders:
+- **images/** - Uploaded cell images
+- **daily_exports/** - Automatic daily backups
+- **exports/** - Manual export files
+
+### Archive:
+- **ARCHIVE/** - Extra files moved here (documentation, old launchers, etc.)
+
+---
+
+## 🎯 QUICK START
+
+1. **Double-click: 🌐 TEAM ACCESS MANAGER 🌐.bat**
+2. **Follow the prompts**
+3. **Start logging your cell culture data!**
+
+---
+
+## 👥 FOR TEAM MEMBERS
+
+**If someone else started the server:**
+- Use 🌐 TEAM ACCESS MANAGER 🌐.bat
+- It will connect you to the existing server
+- No need to start your own instance!
+
+**First person of the day:**
+- Use 🌐 TEAM ACCESS MANAGER 🌐.bat
+- Choose to start the server
+- Share computer name with team
+
+---
+
+## ❓ NEED HELP?
+
+1. **Setup issues**: Use 🛠️ SETUP ASSISTANT 🛠️.bat
+2. **Connection problems**: Use 🔧 DIAGNOSTIC LAUNCHER 🔧.bat
+3. **Python upgrades**: Use 🔄 VERSION UPGRADE HELPER 🔄.bat
+4. **More info**: Check ARCHIVE folder for detailed guides
+
+---
+
+**🎉 Your iPSC Tracker is ready to use!**

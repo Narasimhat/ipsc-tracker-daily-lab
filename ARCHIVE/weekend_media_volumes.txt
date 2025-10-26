@@ -1,0 +1,15 @@
+iPSC Weekend Media Volume Report
+Generated: 2025-10-25 23:11:17
+Weekend: 2025-11-01 to 2025-11-02
+Entries analyzed: 12
+
+MEDIA VOLUME REQUIREMENTS:
+------------------------------
+E8: 35.0 mL (Sat), 30.0 mL (Sun) = 65.0 mL total
+Essential 8: 15.0 mL (Sat), 10.0 mL (Sun) = 25.0 mL total
+mTeSR1: 25.0 mL (Sat), 20.0 mL (Sun) = 45.0 mL total
+
+DAILY TOTALS:
+Saturday: 75.0 mL
+Sunday: 60.0 mL
+Weekend Total: 135.0 mL
