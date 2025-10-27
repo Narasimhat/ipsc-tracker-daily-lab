@@ -8,6 +8,23 @@ from PIL import Image
 
 from db import *
 
+# GitHub Auto-Backup System
+try:
+    from github_backup import restore_database_on_startup, auto_backup_if_needed
+    
+    # Restore database from GitHub on first load
+    if 'db_restored' not in st.session_state:
+        with st.spinner('🔄 Restoring database from GitHub...'):
+            restore_database_on_startup()
+        st.session_state.db_restored = True
+    
+    # Auto-backup every hour (only triggers if enough time has passed)
+    auto_backup_if_needed(interval_minutes=60)
+    
+except Exception as e:
+    # Silently fail if backup system not available (e.g., local development)
+    pass
+
 # Lab Book Formatting Functions
 def generate_detailed_lab_format(df, include_options):
     """Generate detailed lab book format with full entry descriptions"""
@@ -4354,6 +4371,45 @@ with tab_settings:
 
         st.markdown("---")
         st.markdown("#### 📁 Database Backup")
+        
+        # GitHub Auto-Backup Status
+        st.markdown("**☁️ Cloud Auto-Backup (GitHub)**")
+        try:
+            from github_backup import backup_database_now, get_backup_system
+            
+            backup_sys = get_backup_system()
+            
+            # Show backup status
+            if backup_sys.is_cloud_environment():
+                st.info("✅ Auto-backup is ACTIVE - Database backs up to GitHub every hour")
+                
+                # Show last backup time
+                last_backup = st.session_state.get('last_backup_time', 0)
+                if last_backup > 0:
+                    from datetime import datetime
+                    import time
+                    backup_time = datetime.fromtimestamp(last_backup)
+                    st.caption(f"Last auto-backup: {backup_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                
+                # Manual backup button
+                if st.button("🔄 Backup to GitHub Now", help="Immediately backup database to GitHub"):
+                    with st.spinner('Backing up to GitHub...'):
+                        success = backup_database_now(force=True)
+                        if success:
+                            st.success("✅ Database backed up to GitHub successfully!")
+                            st.session_state.last_backup_time = time.time()
+                        else:
+                            st.warning("⚠️ Backup attempted but may have failed. Check logs.")
+                
+                st.caption("💡 View backups: [GitHub db-backup branch](https://github.com/Narasimhat/ipsc-tracker-daily-lab/tree/db-backup)")
+            else:
+                st.caption("ℹ️ Cloud auto-backup only active on Streamlit Cloud")
+        except ImportError:
+            st.caption("⚠️ GitHub backup module not available")
+        except Exception as e:
+            st.caption(f"⚠️ Backup system error: {str(e)}")
+        
+        st.markdown("---")
         
         backup_col1, backup_col2 = st.columns(2)
         
