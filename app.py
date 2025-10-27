@@ -2118,15 +2118,27 @@ with tab_history:
                 # Simple and reliable copy approach
                 st.markdown("**📋 Copy Options:**")
                 
-                # Option 1: Try pyperclip for direct copying (works locally)
+                # Option 1: Try pyperclip for direct copying (works locally, not in Docker)
+                clipboard_available = False
                 try:
                     import pyperclip
+                    # Test if clipboard actually works
+                    pyperclip.copy("")
+                    clipboard_available = True
+                except (ImportError, FileNotFoundError, Exception):
+                    # Clipboard not available (Docker, headless environments, etc.)
+                    clipboard_available = False
+                
+                if clipboard_available:
                     if st.button("📋 Copy to Clipboard", help="Direct copy using pyperclip", type="primary"):
-                        pyperclip.copy(formatted_text)
-                        st.success("✅ **Copied to clipboard!** You can now paste (Ctrl+V) in your lab book.")
-                        st.balloons()
-                except ImportError:
-                    # Option 2: Show instructions prominently
+                        try:
+                            pyperclip.copy(formatted_text)
+                            st.success("✅ **Copied to clipboard!** You can now paste (Ctrl+V) in your lab book.")
+                            st.balloons()
+                        except Exception:
+                            st.warning("⚠️ Clipboard copy failed. Please use manual copy (Ctrl+A, Ctrl+C)")
+                else:
+                    # Option 2: Show instructions prominently (fallback for Docker/restricted environments)
                     if st.button("📋 Copy to Clipboard", help="Click to get copy instructions", type="primary"):
                         st.success("✅ **How to Copy:**")
                         st.info("1. **Select All**: Click in the text area above and press `Ctrl+A` (or `Cmd+A` on Mac)\n"

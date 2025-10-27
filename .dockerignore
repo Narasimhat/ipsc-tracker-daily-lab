@@ -1,0 +1,56 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Archives and backups
+ARCHIVE/
+backups/
+*.tar.gz
+
+# Exports
+exports/
+daily_exports/
+*.xlsx
+*.csv
+
+# Logs
+*.log
+daily_export_log.txt
+weekend_media_volumes.txt
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Batch files (not needed in container)
+*.bat
+*.ps1
+
+# Markdown guides (optional, can include if needed)
+*.md
+!README.md
+
+# Test files
+test_*.py
+
+# Deployment files
+docker-compose.yml
+.dockerignore

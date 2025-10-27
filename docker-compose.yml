@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  ipsc-tracker:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persist database and images
+      - ./data:/app/data
+      - ./backups:/app/backups
+    environment:
+      - DATA_ROOT=/app/data
+    restart: unless-stopped
+    container_name: ipsc-tracker
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# Optional: Add backup service
+  ipsc-backup:
+    image: alpine:latest
+    volumes:
+      - ./data:/data
+      - ./backups:/backups
+    command: >
+      sh -c "
+      while true; do
+        echo 'Creating backup...'
+        tar -czf /backups/ipsc-backup-$$(date +%Y%m%d-%H%M%S).tar.gz -C /data .
+        find /backups -name '*.tar.gz' -mtime +30 -delete
+        sleep 86400
+      done
+      "
+    restart: unless-stopped
+    depends_on:
+      - ipsc-tracker
