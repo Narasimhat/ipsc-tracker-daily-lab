@@ -1,13 +1,13 @@
 """
-Simple Authentication System for iPSC Tracker
-Bypasses streamlit-authenticator complexity for reliable demo
+Production Authentication using Streamlit Secrets
+Credentials stored securely in cloud environment
 """
 
 import streamlit as st
 
 def require_authentication():
     """
-    Simple authentication that definitely works
+    Production authentication using Streamlit secrets
     """
     
     # Check if user is already logged in
@@ -26,34 +26,47 @@ def require_authentication():
         login_button = st.form_submit_button("🚀 Login")
         
         if login_button:
-            # Check credentials
-            if username in ["admin", "demo"] and password == "demo123":
-                # Set session state
-                st.session_state.authenticated = True
-                st.session_state.username = username
-                st.session_state.name = "Admin User" if username == "admin" else "Demo User"
-                st.session_state.user_role = "admin"
-                st.session_state.user_email = f"{username}@lab.org"
-                st.session_state.user_team = "Management" if username == "admin" else "General"
-                
-                st.success("✅ Login successful!")
-                st.balloons()
-                st.rerun()
-            else:
-                st.error("❌ Invalid username or password")
-                st.info("💡 Demo credentials: admin/demo123 or demo/demo123")
+            # Try to get user credentials from Streamlit secrets
+            try:
+                users = st.secrets["users"]
+                if username in users and password == users[username]["password"]:
+                    # Set session state
+                    st.session_state.authenticated = True
+                    st.session_state.username = username
+                    st.session_state.name = users[username].get("name", username)
+                    st.session_state.user_role = users[username].get("role", "member")
+                    st.session_state.user_email = users[username].get("email", f"{username}@lab.org")
+                    st.session_state.user_team = users[username].get("team", "General")
+                    
+                    st.success("✅ Login successful!")
+                    st.balloons()
+                    st.rerun()
+                else:
+                    st.error("❌ Invalid username or password")
+                    st.info("💡 Contact your lab administrator for access credentials")
+            except Exception:
+                # Fallback to hardcoded admin for initial setup
+                if username == "admin" and password == "setup2024!":
+                    st.session_state.authenticated = True
+                    st.session_state.username = "admin"
+                    st.session_state.name = "System Administrator"
+                    st.session_state.user_role = "admin"
+                    st.session_state.user_email = "admin@lab.org"
+                    st.session_state.user_team = "Management"
+                    
+                    st.success("✅ Login successful!")
+                    st.warning("⚠️ Using fallback admin credentials. Configure Streamlit secrets for production.")
+                    st.rerun()
+                else:
+                    st.error("❌ Invalid credentials or system not configured")
+                    st.info("💡 Contact system administrator for setup")
     
-    # Show demo credentials
-    st.info("🔑 **Demo Credentials:**")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.code("Username: admin\nPassword: demo123")
-    with col2:
-        st.code("Username: demo\nPassword: demo123")
-    
-    st.warning("⚠️ Please enter your credentials above to continue")
+    # No visible credentials
+    st.warning("⚠️ Please enter your credentials to continue")
+    st.info("🔒 This is a secure system. Contact your lab administrator for access.")
     st.stop()
 
+# Rest of functions remain the same...
 def get_current_user():
     return st.session_state.get("username", None)
 
@@ -88,7 +101,6 @@ def require_pro():
         st.error("❌ Pro features required")
         st.stop()
 
-# Add logout functionality to sidebar
 def show_user_info():
     """Show user info and logout in sidebar"""
     if st.session_state.get("authenticated"):
@@ -100,12 +112,10 @@ def show_user_info():
             
             st.markdown("---")
             if st.button("🚪 Logout"):
-                # Clear session state
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
                 st.rerun()
 
-# For compatibility with existing imports
 def get_user_team(username):
     if username == st.session_state.get("username"):
         return st.session_state.get("user_team")
