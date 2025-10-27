@@ -6,7 +6,15 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
+# Page configuration - MUST BE FIRST!
+st.set_page_config(page_title="iPSC Tracker", page_icon="🧬", layout="wide")
+
 from db import *
+
+# Professional Authentication System - MUST BE FIRST AFTER PAGE CONFIG!
+from auth import require_authentication, get_current_user, get_current_user_display_name, get_current_user_role, is_admin, is_pro_user, show_user_info
+require_authentication()
+show_user_info()  # Add user info to sidebar
 
 # GitHub Auto-Backup System
 try:
@@ -273,10 +281,28 @@ def generate_simple_list_format(df, include_options):
     import_from_excel,
     IMAGES_DIR
 
-st.set_page_config(page_title="iPSC Culture Tracker", layout="wide")
-
 st.title("🧬 iPSC Culture Tracker")
 st.write("LIMS-style multi-user cell culture tracker with thaw-linked histories.")
+
+# Show current user context
+current_user = get_current_user()
+display_name = get_current_user_display_name()
+user_role = get_current_user_role()
+
+# User context banner
+user_col1, user_col2, user_col3 = st.columns([2, 1, 1])
+with user_col1:
+    st.success(f"👤 Welcome, **{display_name}** ({current_user})")
+with user_col2:
+    role_emoji = {"admin": "👑", "pro": "⭐", "member": "👨‍🔬", "viewer": "👁️"}.get(user_role, "👤")
+    st.info(f"{role_emoji} Role: **{user_role.title()}**")
+with user_col3:
+    if is_admin():
+        st.warning("🔧 Admin Access")
+    elif is_pro_user():
+        st.info("⭐ Pro Features")
+    else:
+        st.caption("Standard Access")
 
 # Initialize database and storage
 conn = get_conn()
@@ -296,14 +322,50 @@ st.session_state["my_name"] = None if my_name == "(none)" else my_name
 if "pending_thaw_id" not in st.session_state:
     st.session_state["pending_thaw_id"] = ""
 
-tab_add, tab_history, tab_thaw, tab_weekend, tab_dashboard, tab_settings = st.tabs([
+# Create tabs based on user role
+tabs_config = [
     "Add Entry",
-    "History",
+    "History", 
     "Thaw Timeline",
     "Weekend Tasks",
     "Dashboard",
-    "Settings",
-])
+    "Settings"
+]
+
+# Add role-specific tabs
+if is_admin():
+    tabs_config.append("👑 Admin")
+    tabs_config.append("👥 Team")
+    tabs_config.append("⭐ Pro Features")
+elif is_pro_user():
+    tabs_config.append("👥 Team")
+    tabs_config.append("⭐ Pro Features")
+else:
+    tabs_config.append("👥 Team")
+
+# Create tabs dynamically
+tabs = st.tabs(tabs_config)
+tab_add = tabs[0]
+tab_history = tabs[1] 
+tab_thaw = tabs[2]
+tab_weekend = tabs[3]
+tab_dashboard = tabs[4]
+tab_settings = tabs[5]
+
+# Assign additional tabs based on role
+tab_admin = None
+tab_team = None
+tab_pro = None
+
+if is_admin():
+    tab_admin = tabs[6]
+    tab_team = tabs[7]
+    tab_pro = tabs[8]
+elif is_pro_user():
+    tab_team = tabs[6]
+    tab_pro = tabs[7]
+else:
+    tab_team = tabs[6]
 
 # ----------------------- Add Entry Tab -----------------------
 with tab_add:
@@ -4548,3 +4610,48 @@ with tab_settings:
         - 🔄 Data migration between systems
         - 📈 Custom reporting and visualization
         """)
+
+# Advanced Features Tabs
+if tab_admin:
+    with tab_admin:
+        try:
+            from admin_panel import show_admin_panel
+            show_admin_panel()
+        except ImportError as e:
+            st.error("❌ Admin panel module not available")
+            st.info("💡 Admin panel features are being loaded...")
+            st.write("**Admin Panel Features (Coming Soon):**")
+            st.write("- 👥 User Management")
+            st.write("- 📊 System Analytics") 
+            st.write("- 🔧 System Configuration")
+            st.write("- 📤 Data Export/Import")
+        except Exception as e:
+            st.error(f"❌ Admin panel error: {e}")
+
+if tab_team:
+    with tab_team:
+        try:
+            from team_features import show_team_dashboard
+            show_team_dashboard()
+        except ImportError as e:
+            st.error("❌ Team features module not available")
+            st.info("💡 Team collaboration features are being loaded...")
+        except Exception as e:
+            st.error(f"❌ Team dashboard error: {e}")
+            st.write("Please check the application logs for details.")
+
+if tab_pro:
+    with tab_pro:
+        try:
+            from pro_features import show_pro_features
+            show_pro_features()
+        except ImportError as e:
+            st.error("❌ Pro features module not available")
+            st.info("💡 Pro analytics features are being loaded...")
+            st.write("**Pro Features (Coming Soon):**")
+            st.write("- 📊 Advanced Analytics")
+            st.write("- 🧬 Experimental Tracking")
+            st.write("- 📈 Performance Metrics")
+            st.write("- 📤 Bulk Operations")
+        except Exception as e:
+            st.error(f"❌ Pro features error: {e}")
